@@ -1,0 +1,15 @@
+#virual system and python temp files
+venv/
+__pycache__/
+*.pyc
+
+#temporary screenshot file
+pogo_screen.png
+
+#OS and editor files
+desktop.ini
+Thumbs.db
+.DS_Store
+
+#vs code settings
+.vscode/
