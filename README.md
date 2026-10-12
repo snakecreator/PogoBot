@@ -75,14 +75,12 @@ Project parameters are managed via config.json. You can tweak the following valu
 
 ```JSON
 {
-  "timeout_seconds": 10,
-  "click_interval_seconds": 0.15,
   "timeout_seconds": 30, 
   "click_interval_seconds": 0.04,
   "battle_duration_seconds": 55,
   "opencv_threshold": 0.80,
   "ratio_attack": [0.501, 0.805],
-  "ratio_switch_slot2": [0.898, 0.607
+  "ratio_switch_slot2": [0.898, 0.607]
 }
 ```
 
