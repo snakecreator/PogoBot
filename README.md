@@ -98,6 +98,9 @@ Project parameters are managed via config.json. You can tweak the following valu
 	├── you_win.png 
 	├── checkmark.png 
 	└── training.png
+└── tests/
+	├── test_config.py
+	├── test_logic.py
 ```
 ## Troubleshooting & Custom Templates
 
@@ -107,6 +110,41 @@ If the bot struggles to recognize UI elements or fails to switch Pokémon on you
 * Take a screenshot of your own phone screen during the relevant battle step.   
 * Crop the specific UI element (e.g., Candela icon, Battle button, or your specific 2nd slot Pokémon/Vaporeon) using an image editor   
 * Save the cropped image into the `templates/` folder using the exact same file name, replacing the default template.
+
 ## Disclaimer
 
 This project is intended strictly for educational and personal research purposes. Automated actions may violate Pokémon GO's Terms of Service. Use at your own risk.
+
+## Testing and Code Quality
+
+The project includes automated unit tests (`pytest`), a code quality linter (`ruff`), and a dependency security scanner (`pip-audit`).
+
+### 1. Installing Development Dependencies
+
+To run tests locally, install the additional test packages:
+
+```bash
+pip install -r requirements-dev.txt
+```
+
+### 2. Running Unit Tests
+
+All tests are located in the `tests/` directory and utilize mocking (`unittest.mock`), meaning they do not require a phone to be connected:
+
+```bash
+pytest
+```
+
+### 3. Checking Code Quality and Security
+
+Formatting and linting:
+
+```bash
+ruff check .
+```
+
+Scanning for vulnerabilities in libraries:
+
+```bash
+pip-audit
+```

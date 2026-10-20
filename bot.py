@@ -11,15 +11,15 @@ python3 bot.py --minutes 120       # stop after 2 hours
 python3 bot.py --help              # shows usage 
 """
 
-import subprocess
-import cv2
-import numpy as np
-import time
 import argparse
-import sys
 import json
 import os
+import subprocess
+import sys
+import time
 from datetime import datetime
+
+import cv2
 
 # ── Configuration ─────────────────────────────────────────────────────────────
 
@@ -53,7 +53,7 @@ SCREEN_H = 0
 def get_screen_resolution():
     """Retrieves screen width and height of the connected phone via ADB."""
     res = subprocess.run(
-        ["adb", "shell", "wm", "size"], capture_output=True, text=True
+        ["adb", "shell", "wm", "size"], check=False, capture_output=True, text=True
     )
     size_str = res.stdout.split(":")[-1].strip()
     width, height = map(int, size_str.split("x"))
@@ -62,18 +62,20 @@ def get_screen_resolution():
 # ── ADB ───────────────────────────────────────────────────────────────────────
 def screenshot():
     """Captures a screenshot from the phone."""
-    subprocess.run(
-        ["adb", "exec-out", "screencap", "-p"],
-        stdout=open(SCREENSHOT_PATH, "wb"),
-        stderr=subprocess.DEVNULL,
-    )
+    with open(SCREENSHOT_PATH, "wb") as f:
+        subprocess.run(
+            ["adb", "exec-out", "screencap", "-p"],
+            stdout=f,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        )
     return cv2.imread(SCREENSHOT_PATH)
 
 def tap(x, y):
     """Taps on point (x, y) on the phone screen."""
     subprocess.run(
         ["adb", "shell", "input", "tap", str(x), str(y)],
-        stderr=subprocess.DEVNULL,
+        check=False, stderr=subprocess.DEVNULL,
     )
 
 def tap_ratio(ratio_x, ratio_y):
@@ -189,7 +191,7 @@ def run_single_battle(number):
         tap_ratio(*RATIO_ATTACK)
         if time.time() > start_searching_win:
             screen = screenshot()
-            val, cx, cy = find_template(screen, "you_win.png")
+            val, _cx, _cy = find_template(screen, "you_win.png")
             if val >= THRESHOLD:
                 log("YOU WIN detected!")
                 break
@@ -218,7 +220,7 @@ def main():
     args = parser.parse_args()
 
     # Check ADB connection
-    result = subprocess.run(["adb", "devices"], capture_output=True, text=True)
+    result = subprocess.run(["adb", "devices"], check=False, capture_output=True, text=True)
     if "device" not in result.stdout:
         print("ERROR: Device is not connected or ADB is not running.")
         print("Run: adb devices")
@@ -271,7 +273,7 @@ def main():
 
     # Summary
     total_time = int(time.time() - start_time)
-    log(f"═══ Summary ═══")
+    log("═══ Summary ═══")
     log(f"Fights: {fight_number}")
     log(f"Time: {total_time // 60}m {total_time % 60}s")
 
@@ -281,7 +283,7 @@ def main():
             "notify-send",
             "Pokemon GO Bot",
             f"Finished! Fights: {fight_number}, Time: {total_time // 60}m"
-        ], stderr=subprocess.DEVNULL)
+        ], check=False, stderr=subprocess.DEVNULL)
     else:
         log(f"Finished! Fights: {fight_number}, Time: {total_time // 60}m")
 

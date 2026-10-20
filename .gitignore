@@ -13,3 +13,9 @@ Thumbs.db
 
 #vs code settings
 .vscode/
+
+# ruff cache
+.ruff_cache/
+
+# pytest cache
+.pytest_cache/
